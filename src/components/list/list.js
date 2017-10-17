@@ -5,9 +5,6 @@ import './list.css';
 
 
 export class List extends Component {
-    constructor(props) {
-        super(props)
-    }
 
     generateList() {
         if (!this.props.taskList || !this.props.taskList.length) return
@@ -17,6 +14,7 @@ export class List extends Component {
                     key={elem.id}
                     task={elem}
                     onShowEditForm={this.props.onShowEditForm}
+                    onRemoveTask={this.props.onRemoveTask}
                 />
             )
         })

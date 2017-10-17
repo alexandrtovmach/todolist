@@ -19,25 +19,40 @@ class App extends Component {
         .catch((err) => {
             console.log(err);
         })
+
     }
 
     render() {
-        return (
-            <div>
-                <Form
-                    onCloseForm={this.props.onCloseForm}
-                    hideForm={this.props.hideForm}
-                    taskForEdit={this.props.taskForEdit}
-                    onAddTask={this.props.onAddTask}
-                    onEditTask={this.props.onEditTask}
-                />
-                <List
-                    taskList={this.props.taskList}
-                    onShowEditForm={this.props.onShowEditForm}
-                    onShowAddForm={this.props.onShowAddForm}
-                />
-            </div>
-        )
+        if (!this.props.hideForm) {
+            return (
+                <div className="main">
+                    <Form
+                        onCloseForm={this.props.onCloseForm}
+                        hideForm={this.props.hideForm}
+                        taskForEdit={this.props.taskForEdit}
+                        onAddTask={this.props.onAddTask}
+                        onEditTask={this.props.onEditTask}
+                    />
+                    <List
+                        taskList={this.props.taskList}
+                        onShowEditForm={this.props.onShowEditForm}
+                        onShowAddForm={this.props.onShowAddForm}
+                        onRemoveTask={this.props.onRemoveTask}
+                    />
+                </div>
+            )
+        } else {
+            return (
+                <div className="main">
+                    <List
+                        taskList={this.props.taskList}
+                        onShowEditForm={this.props.onShowEditForm}
+                        onShowAddForm={this.props.onShowAddForm}
+                        onRemoveTask={this.props.onRemoveTask}
+                    />
+                </div>
+            )
+        }
     }
 }
 export default connect(
@@ -64,6 +79,9 @@ export default connect(
         },
         onEditTask: (task) => {
             dispatch({type: 'EDIT_TASK', payload: task});
+        },
+        onRemoveTask: (id) => {
+            dispatch({type: 'REMOVE_TASK', payload: id});
         },
     })
 )(App);

@@ -4,10 +4,6 @@ import './form.css';
 
 
 export class Form extends Component {
-    constructor(props) {
-        super(props)
-        console.log('acoustic', this.props);
-    }
 
     submitForm(event) {
         event.preventDefault();

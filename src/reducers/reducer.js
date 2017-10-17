@@ -37,32 +37,24 @@ export function game(state = {}, action) {
             break;
         }
         case 'ADD_TASK': {
-            return HttpService({type: 'POST', path: '/api/plans', body: action.payload})
-            .then((response) => {
-                return {
-                    ...state,
-                    taskList: response
-                };
-            })
+            HttpService({type: 'POST', path: '/api/plans', body: action.payload})
             .catch((err) => {
-                console.log(err);
+                console.err(err);
             })
-
             break;
         }
         case 'EDIT_TASK': {
-            HttpService({type: 'PUT', path: '/api/plans', body: action.payload})
-            .then((response) => {
-                console.log(response);
-                return {
-                    ...state,
-                    taskList: response
-                };
-            })
+            HttpService({type: 'PUT', path: `/api/plans/${action.payload.id}`, body: action.payload})
             .catch((err) => {
                 console.log(err);
             })
-
+            break;
+        }
+        case 'REMOVE_TASK': {
+            HttpService({type: 'DELETE', path: `/api/plans/${action.payload}`})
+            .catch((err) => {
+                console.log(err);
+            })
             break;
         }
         

@@ -7,30 +7,10 @@ const webpack = require('webpack'),
     config = require('./webpack.config'),
     { Pool } = require('pg'),
     connectionString = 'postgres://yajlgkyx:8KVuIvVyweA9AG6hGkXVglj2ojBkftqC@elmer.db.elephantsql.com:5432/yajlgkyx',
-    pool = new Pool({connectionString}),
+    pool = new Pool({ connectionString }),
     port = 2017;
 
-
 pool.connect();
-
-const loremData =  [
-    {
-        id: 1,
-        name: 'Eat',
-        description: 'eat some',
-        deadline: 19
-    }, {
-        id: 2,
-        name: 'Work',
-        description: 'workcode',
-        deadline: 23
-    }, {
-        id: 3,
-        name: 'Sleep',
-        description: 'sleep in time',
-        deadline: 23
-    }]
-
 const app = express();
 // webpack building
 const compiler = webpack(config);
@@ -40,56 +20,59 @@ app.use(webpackHotMiddleware(compiler));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.get("/", function(req, res) {
+app.get("/", function (req, res) {
     res.sendFile(__dirname + '/index.html');
 })
 
 app.get('/api/plans', (req, res) => {
+    console.log('get')
     pool.query('SELECT * FROM plans')
-    .then((data) => {
-        res.send(data.rows);
-    })
-    .catch((err) => {
-        console.log(err);
-    })
+        .then((data) => {
+            res.send(data.rows);
+        })
+        .catch((err) => {
+            console.log(err);
+        })
 })
 
 app.post('/api/plans', (req, res) => {
+    console.log('post', req.body)
     pool.query('INSERT INTO plans(name, description, deadline) values($1, $2, $3)', [req.body.name, req.body.description, req.body.deadline])
-    .then(() => {
-        pool.query('SELECT * FROM plans')
-        .then((data) => {
-            res.send(data.rows);
+        .then(() => {
+            // some action
         })
         .catch((err) => {
             console.log(err);
-        });
-    })
-    .catch((err) => {
-        console.log(err);
-    })
+        })
 })
 
-app.put('/api/plans', (req, res) => {
-    pool.query('UPDATE plans SET name=$1, description=$2, deadline=$3 WHERE id=$4', [req.body.name, req.body.description, req.body.deadline, req.body.id])
-    .then(() => {
-        pool.query('SELECT * FROM plans')
-        .then((data) => {
-            res.send(data.rows);
+app.put('/api/plans/:id', (req, res) => {
+    console.log('put', req.params.id, req.body)
+    pool.query('UPDATE plans SET name=$1, description=$2, deadline=$3 WHERE id=$4', [req.body.name, req.body.description, req.body.deadline, req.params.id])
+        .then(() => {
+            // some action
+            res.sendStatus(200);
         })
         .catch((err) => {
             console.log(err);
-        });
-    })
-    .catch((err) => {
-        console.log(err);
-    })
+        })
 })
 
-app.listen(port, (err)  => {
+app.delete('/api/plans/:id', (req, res) => {
+    console.log('delete', req.params.id)
+    pool.query('DELETE FROM plans WHERE id=$1', [req.params.id])
+        .then(() => {
+            // some action
+            res.sendStatus(200);
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+})
+
+app.listen(port, (err) => {
     if (err) {
         console.log(err);
     }
-	console.log(`http://localhost:${port}`);
+    console.log(`http://localhost:${port}`);
 })
-
