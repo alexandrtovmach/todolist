@@ -5,30 +5,25 @@ function dbConnectionHandler() {
 
     admin.initializeApp({
         credential: admin.credential.cert(serviceAccount),
-        databaseURL: config.databaseURL
-    });
-
-
-    const database = admin.firestore();
-
-    var docRef = database.collection('name');
-    
-    docRef.get().then(function(doc) {
-        if (doc.exists) {
-            console.log("Document data:", doc.data());
-        } else {
-            console.log("No such document!");
+        databaseURL: config.databaseURL,
+        databaseAuthVariableOverride: {
+            uid: config.uid
         }
-    }).catch(function(error) {
-        console.log("Error getting document:", error);
     });
-    // console.log(firestore.collection('name'));
-    // const docRef = firestore.doc('bere')
 
-    // const dbRef = admin.database().ref().child('text');
-    // dbRef.on('value', snap => {
-    //     console.log(snap.val());
-    // })
+    this.ref = admin.database().ref("tasks");
+    this.test = () => {
+        return this.ref = admin.database().ref("test");
+    }
+
+    // connecting request
+    this.ref.once('value')
+    .then(() => {
+        console.log('\n============================\n=== Firebase connected ===\n============================\n');
+    })
+    .catch((errorObject) => {
+        console.log('\n!!!!Firebase CONNECTION ERROR!!!!\n', errorObject.code);
+    });
 }
 
 module.exports = new dbConnectionHandler();

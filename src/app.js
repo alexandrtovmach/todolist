@@ -12,14 +12,23 @@ class App extends Component {
     constructor(props) {
         super(props);
 
-        HttpService({type: 'GET', path: '/api/plans'})
-        .then((response) => {
-            this.props.onGetedTaskList(response.data);
-        })
-        .catch((err) => {
-            console.log(err);
-        })
-
+        this.changeDB = (event) => {
+            if (event.target.value === 'pg' || event.target.value === 'fb') {
+                HttpService({type: 'GET', path: `/api/changedefaultdb/${event.target.value}`})
+                .then(() => {
+                    HttpService({type: 'GET', path: '/api/plans'})
+                    .then((response) => {
+                        this.props.onGetedTaskList(response.data);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    })
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+            }
+        }
     }
 
     render() {
@@ -44,6 +53,14 @@ class App extends Component {
         } else {
             return (
                 <div className="main">
+                    <form id="dbForm" onClick={this.changeDB} onLoad={this.changeDB}>
+                        <label>PosgreSQL
+                            <input type="radio" name="db" value="pg"/>
+                        </label>
+                        <label>Firebase
+                            <input type="radio" name="db" value="fb" />
+                        </label>
+                    </form>
                     <List
                         taskList={this.props.taskList}
                         onShowEditForm={this.props.onShowEditForm}

@@ -10,7 +10,7 @@ export class Form extends Component {
         const taskObj = {
             name: this.refs.name.value,
             description: this.refs.description.value,
-            deadline: this.refs.deadline.value
+            deadline: +this.refs.deadline.value
         }
         if (this.props.taskForEdit && this.props.taskForEdit.id) {
             taskObj.id = this.props.taskForEdit.id;

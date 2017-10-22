@@ -1,5 +1,4 @@
-const db = require('../db/pgDbConnect').pool,
-    firebase = require('../db/firebaseDbConnect');
+const db = require('../../db/pgDbConnect').pool;
 
 function TaskRepository() {};
 
@@ -11,7 +10,7 @@ TaskRepository.prototype.deleteTask = deleteTask;
 function getTasks(callback) {
     db.query('SELECT * FROM plans')
     .then((data) => {
-        callback(null, data);
+        callback(null, data.rows);
     })
     .catch((err) => {
         callback(err);

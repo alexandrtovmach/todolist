@@ -24,7 +24,7 @@ export class List extends Component {
         return (
             <div>
                 {this.generateList()}
-                <div className="row btn btn-add centerContent" onClick={this.props.onShowAddForm}>Add task</div>
+                <div className={this.props.taskList? "row btn btn-add centerContent": 'hidden'} onClick={this.props.onShowAddForm}>Add task</div>
             </div>
         )
     }

@@ -4,5 +4,6 @@ module.exports = {
     databaseURL: "https://todolist-1asca.firebaseio.com",
     projectId: "todolist-1asca",
     storageBucket: "todolist-1asca.appspot.com",
-    messagingSenderId: "180812312956"
+    messagingSenderId: "180812312956",
+    uid: "learning-firebase-db"
 };

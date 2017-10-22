@@ -39,7 +39,7 @@ export function game(state = {}, action) {
         case 'ADD_TASK': {
             HttpService({type: 'POST', path: '/api/plans', body: action.payload})
             .catch((err) => {
-                console.err(err);
+                console.error(err);
             })
             break;
         }
